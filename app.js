@@ -283,7 +283,7 @@ exports.getOG = function(options, callback) {
 			
 			// Fallback url to uri
 			if(ogObject.ogUrl == undefined || ogObject.ogUrl == "") {
-				ogObject.ogTitle = response.request.href;
+				ogObject.ogUrl = response.request.href;
 			}
 
 			//example of how to get the title tag
