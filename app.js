@@ -115,6 +115,7 @@ exports.getInfo = function(options, callback){
 	this.validateVars(options.url, options.timeout, function(inputUrlFlag, inputUrl, inputTimeoutFlag, inputTimeout){
 		if(inputUrlFlag && inputUrlFlag == true && inputTimeoutFlag && inputTimeoutFlag == true){
 			options.url = inputUrl;
+			options.followAllRedirects = true;
 			options.timeout = inputTimeout;
 			that.getOG(options, function(err, results) {
 				if(results && results.success){
@@ -216,14 +217,6 @@ exports.getOG = function(options, callback) {
 	request(options, function(err, response, body) {
 		if(err){
 			callback(err, null);
-		} else if {
-		        var hostblacklist = ['https://twitter.com', 'www.twitter.com', 'www.facebook.com']
-		        var host = response.request.uri.host;
-
-		        if (containsKeyword(host, hostblacklist)) {
-		          callback(new Error('Host not allowed: '+host))
-		          return
-		        }			
 		} else {
 			var $ = cheerio.load(body),
 				meta = $('meta'),
@@ -283,9 +276,14 @@ exports.getOG = function(options, callback) {
 			if (ogVideos.length)
 				ogObject.ogVideo = ogVideos[0];
 
-			// Fallback to <title>
+			// Fallback title to <title>
 			if(ogObject.ogTitle == undefined || ogObject.ogTitle == "") {
 				ogObject.ogTitle = $("title").text();
+			}
+			
+			// Fallback url to uri
+			if(ogObject.ogUrl == undefined || ogObject.ogUrl == "") {
+				ogObject.ogTitle = response.request.href;
 			}
 
 			//example of how to get the title tag
