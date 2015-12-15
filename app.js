@@ -216,6 +216,14 @@ exports.getOG = function(options, callback) {
 	request(options, function(err, response, body) {
 		if(err){
 			callback(err, null);
+		} else if {
+		        var hostblacklist = ['https://twitter.com', 'www.twitter.com', 'www.facebook.com']
+		        var host = response.request.uri.host;
+
+		        if (containsKeyword(host, hostblacklist)) {
+		          callback(new Error('Host not allowed: '+host))
+		          return
+		        }			
 		} else {
 			var $ = cheerio.load(body),
 				meta = $('meta'),
