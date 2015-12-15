@@ -275,6 +275,11 @@ exports.getOG = function(options, callback) {
 			if (ogVideos.length)
 				ogObject.ogVideo = ogVideos[0];
 
+			// Fallback to <title>
+			if(ogObject.ogTitle == undefined || ogObject.ogTitle == "") {
+				ogObject.ogTitle = $("title").text();
+			}
+
 			//example of how to get the title tag
 			// $('title').map(function(i, info) {
 			// 	console.log('title:',info.children[0].data);
